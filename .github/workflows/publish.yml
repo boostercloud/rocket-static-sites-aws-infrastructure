@@ -30,7 +30,7 @@ jobs:
       - name: Configure Git
         run: |
           git remote rm origin
-          git remote add origin "https://$USER_NAME:$GITHUB_PAT@github.com/boostercloud/rocket-backup-aws-infrastructure.git"
+          git remote add origin "https://$USER_NAME:$GITHUB_PAT@github.com/boostercloud/rocket-static-sites-aws-infrastructure.git"
           git fetch
           git config --local user.email "action@github.com"
           git config --local user.name "GITHUBACTION"
