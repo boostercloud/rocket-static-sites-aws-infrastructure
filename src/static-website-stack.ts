@@ -58,7 +58,7 @@ export class StaticWebsiteStack {
 
       new CfnOutput(stack, 'staticWebsiteURL', {
         value: `https://${cloudFrontDistribution.distributionDomainName}`,
-        description: `The URL for the static website generated from ${rootPath} directory`,
+        description: `The URL for the static website generated from ${rootPath} directory.`,
       })
     } else {
       throw new Error(
