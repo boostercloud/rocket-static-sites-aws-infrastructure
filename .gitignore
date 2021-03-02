@@ -1,0 +1,16 @@
+*-debug.log
+*-error.log
+.nyc_output
+dist/
+lib/
+tmp/
+node_modules/
+*.tsbuildinfo
+.idea
+coverage
+.DS_Store
+scripts/mirroring.js
+.docs
+.booster
+.deploy
+

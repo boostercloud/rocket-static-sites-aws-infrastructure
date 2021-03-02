@@ -1,0 +1,91 @@
+{
+  "name": "@boostercloud/rocket-static-sites-aws-infrastructure",
+  "version": "1.0.0",
+  "description": "Booster rocket to deploy static sites to Booster applications in AWS.",
+  "keywords": [
+    "Booster",
+    "plugin",
+    "aws",
+    "static-sites"
+  ],
+  "author": "Booster Cloud",
+  "homepage": "https://booster.cloud",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boostercloud/rocket-static-sites-aws-infrastructure.git"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-cloudfront": "1.67.0",
+    "@aws-cdk/aws-s3": "1.67.0",
+    "@aws-cdk/aws-s3-deployment": "1.67.0",
+    "@aws-cdk/core": "1.67.0",
+    "@boostercloud/framework-types": "0.11.4"
+  },
+  "scripts": {
+    "lint:check": "eslint --ext '.js,.ts' **/*.ts",
+    "lint:fix": "eslint --quiet --fix --ext '.js,.ts' **/*.ts",
+    "compile": "tsc -b tsconfig.json",
+    "clean": "rimraf ./dist tsconfig.tsbuildinfo",
+    "prepack": "tsc -b tsconfig.json",
+    "test:rocket-static-sites-aws-infrastructure": "npm run test",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "integration": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\""
+  },
+  "bugs": {
+    "url": "https://github.com/boostercloud/booster/issues"
+  },
+  "devDependencies": {
+    "@boostercloud/framework-provider-aws-infrastructure": "0.11.4",
+    "@types/faker": "5.1.5",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "14.14.20",
+    "@types/sinon": "^9.0.10",
+    "@types/sinon-chai": "^3.2.5",
+    "@typescript-eslint/eslint-plugin": "^2.18.0",
+    "@typescript-eslint/parser": "^2.18.0",
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/npm": "^7.0.10",
+    "aws-cdk": "1.67.0",
+    "chai": "4.2.0",
+    "chai-as-promised": "7.1.1",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "faker": "5.1.0",
+    "mocha": "^8.3.0",
+    "nyc": "^15.1.0",
+    "prettier": "^1.19.1",
+    "sinon": "9.2.3",
+    "sinon-chai": "3.5.0",
+    "velocityjs": "^2.0.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.2",
+    "tslib": "2.1.0"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ]
+    ]
+  }
+}
