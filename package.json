@@ -1,6 +1,6 @@
 {
   "name": "@boostercloud/rocket-static-sites-aws-infrastructure",
-  "version": "1.2.0",
+  "version": "1.0.2",
   "description": "Booster rocket to deploy static sites to Booster applications in AWS.",
   "keywords": [
     "Booster",
