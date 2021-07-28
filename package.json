@@ -1,6 +1,6 @@
 {
   "name": "@boostercloud/rocket-static-sites-aws-infrastructure",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "description": "Booster rocket to deploy static sites to Booster applications in AWS.",
   "keywords": [
     "Booster",
@@ -23,11 +23,11 @@
     "url": "git+https://github.com/boostercloud/rocket-static-sites-aws-infrastructure.git"
   },
   "dependencies": {
-    "@aws-cdk/aws-cloudfront": "1.67.0",
-    "@aws-cdk/aws-s3": "1.67.0",
-    "@aws-cdk/aws-s3-deployment": "1.67.0",
-    "@aws-cdk/core": "1.67.0",
-    "@boostercloud/framework-types": "0.11.5"
+    "@aws-cdk/aws-cloudfront": "1.91.0",
+    "@aws-cdk/aws-s3": "1.91.0",
+    "@aws-cdk/aws-s3-deployment": "1.91.0",
+    "@aws-cdk/core": "1.91.0",
+    "@boostercloud/framework-types": "0.20.2"
   },
   "scripts": {
     "lint:check": "eslint --ext '.js,.ts' **/*.ts",
@@ -43,17 +43,18 @@
     "url": "https://github.com/boostercloud/booster/issues"
   },
   "devDependencies": {
-    "@boostercloud/framework-provider-aws-infrastructure": "0.11.5",
+    "@boostercloud/framework-provider-aws-infrastructure": "0.20.2",
     "@types/faker": "5.1.5",
     "@types/mocha": "^5.2.7",
     "@types/node": "14.14.20",
     "@types/sinon": "^9.0.10",
+    "metadata-booster": "0.3.1",
     "@types/sinon-chai": "^3.2.5",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
     "@semantic-release/git": "^9.0.0",
     "@semantic-release/npm": "^7.0.10",
-    "aws-cdk": "1.67.0",
+    "aws-cdk": "1.91.0",
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     "eslint": "^6.8.0",
