@@ -6,6 +6,7 @@ import {
   OriginAccessIdentity,
   ViewerCertificate,
   ViewerProtocolPolicy,
+  CfnDistribution,
 } from '@aws-cdk/aws-cloudfront'
 import { existsSync } from 'fs'
 import { RocketUtils } from '@boostercloud/framework-provider-aws-infrastructure'
@@ -15,6 +16,7 @@ export type AWSStaticSiteParams = {
   indexFile?: string
   errorFile?: string
   bucketName: string
+  cloudfrontErrorConfigurations?: CfnDistribution.CustomErrorResponseProperty[]
 }
 
 export class StaticWebsiteStack {
@@ -22,6 +24,7 @@ export class StaticWebsiteStack {
     const rootPath = params.rootPath ?? './public'
     const indexFile = params.indexFile ?? 'index.html'
     const errorFile = params.errorFile ?? '404.html'
+    const cloudfrontErrorConfigurations = params.cloudfrontErrorConfigurations
     if (existsSync(rootPath)) {
       const staticWebsiteOIA = new OriginAccessIdentity(stack, 'staticWebsiteOIA', {
         comment: 'Allows static site to be reached only via CloudFront',
@@ -48,6 +51,7 @@ export class StaticWebsiteStack {
             behaviors: [{ isDefaultBehavior: true }],
           },
         ],
+        errorConfigurations: cloudfrontErrorConfigurations,
       })
 
       new BucketDeployment(stack, 'staticWebsiteDeployment', {

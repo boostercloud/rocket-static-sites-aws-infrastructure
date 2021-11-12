@@ -77,6 +77,18 @@ describe('Static website creation', () => {
           rootPath: './frontend/dist',
           indexFile: 'main.html',
           errorFile: 'error.html',
+          cloudfrontErrorConfigurations: [
+            {
+              errorCode: 403,
+              responsePagePath: '/',
+              responseCode: 200,
+            },
+            {
+              errorCode: 404,
+              responsePagePath: '/main.html',
+              responseCode: 200,
+            },
+          ],
         },
         appStack
       )

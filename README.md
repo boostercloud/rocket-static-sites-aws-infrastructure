@@ -26,7 +26,31 @@ Booster.configure('development', (config: BoosterConfig): void => {
       rootPath: './frontend/dist', // Defaults to ./public
       indexFile: 'main.html', // File to render when users access the CLoudFormation URL. Defaults to index.html
       errorFile: 'error.html', // File to render when there's an error. Defaults to 404.html
+      cloudfrontErrorConfigurations: undefined, // needed for single-page applications. Defaults to undefined
     }
   }])
 })
+```
+
+If you’re building a single-page application, it can also be useful to configure what CloudFront does in the case of a 404 or 403 error to allow your application to respond `cloudfrontErrorConfigurations`:
+
+```typescript
+parameters: {
+  bucketName: 'test-bucket-name', // Required
+  rootPath: './frontend/dist', // Defaults to ./public
+  indexFile: 'main.html', // File to render when users access the CLoudFormation URL. Defaults to index.html
+  errorFile: 'error.html', // File to render when there's an error. Defaults to 404.html
+  cloudfrontErrorConfigurations: [
+    {
+      errorCode: 403,
+      responsePagePath: "/",
+      responseCode: 200,
+    },
+    {
+      errorCode: 404,
+      responsePagePath: "/main.html",
+      responseCode: 200,
+    },
+  ]
+}
 ```
