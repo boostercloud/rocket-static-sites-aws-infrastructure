@@ -1,6 +1,9 @@
 import { CfnOutput, RemovalPolicy, Stack } from '@aws-cdk/core'
 import { Bucket } from '@aws-cdk/aws-s3'
 import { BucketDeployment, Source } from '@aws-cdk/aws-s3-deployment'
+import * as route53 from '@aws-cdk/aws-route53'
+import * as targets from '@aws-cdk/aws-route53-targets'
+import * as acm from '@aws-cdk/aws-certificatemanager'
 import {
   CloudFrontWebDistribution,
   OriginAccessIdentity,
@@ -15,6 +18,7 @@ export type AWSStaticSiteParams = {
   indexFile?: string
   errorFile?: string
   bucketName: string
+  domainName?: string
 }
 
 export class StaticWebsiteStack {
@@ -22,6 +26,7 @@ export class StaticWebsiteStack {
     const rootPath = params.rootPath ?? './public'
     const indexFile = params.indexFile ?? 'index.html'
     const errorFile = params.errorFile ?? '404.html'
+    const domainName = params.domainName
     if (existsSync(rootPath)) {
       const staticWebsiteOIA = new OriginAccessIdentity(stack, 'staticWebsiteOIA', {
         comment: 'Allows static site to be reached only via CloudFront',
@@ -35,10 +40,40 @@ export class StaticWebsiteStack {
 
       staticSiteBucket.grantRead(staticWebsiteOIA)
 
+      const errorConfigurations: CfnDistribution.CustomErrorResponseProperty[] = [
+        {
+          errorCode: 403,
+          responsePagePath: "/",
+          responseCode: 200,
+        },
+        {
+          errorCode: 404,
+          responsePagePath: "/index.html",
+          responseCode: 200,
+        },
+      ];
+
+      // We are using a Zone that already exists so we can use a lookup on the Zone name.
+      const zone = domainName ? route53.HostedZone.fromLookup(stack, 'baseZone', { domainName: domainName }) : undefined
+
+      // Request the wildcard TLS certificate, CDK will take care of domain ownership validation via
+      // CNAME DNS entries in Route53, a custom resource will be used on our behalf
+      const myCertificate =
+        domainName && zone
+          ? new acm.DnsValidatedCertificate(stack, 'staticWebsiteCert', {
+            domainName: domainName,
+            hostedZone: zone,
+            region: 'us-east-1',
+          })
+          : undefined
+
       const cloudFrontDistribution = new CloudFrontWebDistribution(stack, 'staticWebsiteDistribution', {
         defaultRootObject: indexFile,
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        viewerCertificate: ViewerCertificate.fromCloudFrontDefaultCertificate(),
+        viewerCertificate:
+          domainName && myCertificate
+            ? ViewerCertificate.fromAcmCertificate(myCertificate, { aliases: [domainName] })
+            : ViewerCertificate.fromCloudFrontDefaultCertificate(),
         originConfigs: [
           {
             s3OriginSource: {
@@ -49,6 +84,15 @@ export class StaticWebsiteStack {
           },
         ],
       })
+
+      if (zone) {
+        // Create the wildcard DNS entry in route53 as an alias to the new CloudFront Distribution.
+        new route53.ARecord(stack, 'AliasRecord', {
+          zone,
+          recordName: domainName,
+          target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(cloudFrontDistribution)),
+        })
+      }
 
       new BucketDeployment(stack, 'staticWebsiteDeployment', {
         sources: [Source.asset(rootPath)],
