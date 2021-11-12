@@ -10,23 +10,24 @@ Install this package as a dev dependency in your Booster project (It's a dev dep
 npm install --save-dev @boostercloud/rocket-static-sites-aws-infrastructure
 ```
 
-In your Booster config file, pass a `RocketDescriptor` array to the AWS' `Provider` initializer configuring the static site rocket:
+In your Booster config file, pass a `RocketDescriptor` in the `config.rockets` array to configuring the static site rocket:
 
 ```typescript
 import { Booster } from '@boostercloud/framework-core'
 import { BoosterConfig } from '@boostercloud/framework-types'
-import * as AWS from '@boostercloud/framework-provider-aws'
 
 Booster.configure('development', (config: BoosterConfig): void => {
   config.appName = 'my-store'
-  config.provider = Provider([{
-    packageName: '@boostercloud/rocket-static-sites-aws-infrastructure', 
-    parameters: {
+  config.rockets = [
+    {
+      packageName: '@boostercloud/rocket-static-sites-aws-infrastructure', 
+      parameters: {
       bucketName: 'test-bucket-name', // Required
       rootPath: './frontend/dist', // Defaults to ./public
       indexFile: 'main.html', // File to render when users access the CLoudFormation URL. Defaults to index.html
       errorFile: 'error.html', // File to render when there's an error. Defaults to 404.html
-    }
-  }])
+      }
+    },
+  ]
 })
 ```
