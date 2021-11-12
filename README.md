@@ -26,6 +26,7 @@ Booster.configure('development', (config: BoosterConfig): void => {
       rootPath: './frontend/dist', // Defaults to ./public
       indexFile: 'main.html', // File to render when users access the CLoudFormation URL. Defaults to index.html
       errorFile: 'error.html', // File to render when there's an error. Defaults to 404.html
+      domainName: 'www.examplepage.test', // This will add the domain including a SSL Certificate with DNS validation to the CloudFront distribution and add an alias record in the Route53 registry. Basedomain needs to exist in Route53. Defaults to undefined
     }
   }])
 })
