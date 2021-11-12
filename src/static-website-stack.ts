@@ -40,19 +40,6 @@ export class StaticWebsiteStack {
 
       staticSiteBucket.grantRead(staticWebsiteOIA)
 
-      const errorConfigurations: CfnDistribution.CustomErrorResponseProperty[] = [
-        {
-          errorCode: 403,
-          responsePagePath: "/",
-          responseCode: 200,
-        },
-        {
-          errorCode: 404,
-          responsePagePath: "/index.html",
-          responseCode: 200,
-        },
-      ];
-
       // We are using a Zone that already exists so we can use a lookup on the Zone name.
       const zone = domainName ? route53.HostedZone.fromLookup(stack, 'baseZone', { domainName: domainName }) : undefined
 
